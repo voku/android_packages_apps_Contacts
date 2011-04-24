@@ -1093,7 +1093,7 @@ public class RecentCallsListActivity extends ListActivity
             resetNewCallsFlag();
         
             mPhotoLoader.resume();
-            mAdapter.mPreDrawListener = null; // Let it restart the thread after next draw
+            mAdapter.startRequestProcessing();
         }
     }
 
