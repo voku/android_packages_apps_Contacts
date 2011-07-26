@@ -1077,7 +1077,7 @@ public class ContactsListActivity extends ListActivity implements View.OnCreateC
         showContactsPic = ePrefs.getBoolean("contacts_show_pic", true);
         showFavsDialButton = ePrefs.getBoolean("favs_show_dial_button", true);
         showFavsPic = ePrefs.getBoolean("favs_show_pic", true);
-        showDisplayHeaders = ePrefs.getBoolean("contacts_show_alphabetical_separators", true);
+        showDisplayHeaders = ePrefs.getBoolean("contacts_show_alphabetical_separators", false);
 
         registerProviderStatusObserver();
         mPhotoLoader.resume();

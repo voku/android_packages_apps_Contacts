@@ -22,7 +22,7 @@
             android:key="dial_retrieve_last"
             android:title="@string/title_last_dialled"
             android:summary="@string/summary_last_dialled"
-            android:defaultValue="false" />
+            android:defaultValue="true" />
         <CheckBoxPreference
             android:key="dial_return"
             android:title="@string/title_return_to_dialer"
@@ -107,7 +107,7 @@
             android:title="@string/title_cl_ask_before_clear"
             android:summaryOn="@string/summaryon_cl_ask_before_clear"
             android:summaryOff="@string/summaryoff_cl_ask_before_clear"
-            android:defaultValue="false" />
+            android:defaultValue="true" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/contactsIconLabel">
         <CheckBoxPreference
@@ -131,7 +131,7 @@
             android:title="@string/title_contacts_show_separators"
             android:summaryOn="@string/summaryon_contacts_show_separators"
             android:summaryOff="@string/summaryoff_contacts_show_separators"
-            android:defaultValue="true" />
+            android:defaultValue="false" />
         <PreferenceScreen
             android:key="view_contact"
             android:title="@string/title_view_contact"
@@ -141,7 +141,7 @@
                 android:title="@string/title_show_text_mobile_only"
                 android:summaryOn="@string/summaryon_show_text_mobile_only"
                 android:summaryOff="@string/summaryoff_show_text_mobile_only"
-                android:defaultValue="false" />                
+                android:defaultValue="true" />                
         </PreferenceScreen>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/contactsFavoritesLabel">
@@ -158,7 +158,7 @@
             android:title="@string/title_favourites_hide_freq_call"
             android:summary="@string/summary_favourites_hide_freq_call"
             android:disableDependentsState="true"
-            android:defaultValue="false" />
+            android:defaultValue="true" />
         <CheckBoxPreference
             android:key="favourites_ask_before_clear"
             android:title="@string/title_favs_ask_before_clear"
@@ -172,7 +172,7 @@
             android:key="misc_sensor_rotation"
             android:title="@string/title_sensor_rotation"
             android:summary="@string/summary_sensor_rotation"
-            android:defaultValue="false" />
+            android:defaultValue="true" />
         <ListPreference
             android:key="misc_data_font_size"
             android:title="@string/title_data_font_size"

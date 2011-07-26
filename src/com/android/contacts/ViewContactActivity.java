@@ -267,7 +267,7 @@ public class ViewContactActivity extends Activity
         super.onResume();
         
         //Wysie: Read from preference
-        mShowSmsLinksForAllPhones = !ePrefs.getBoolean("contacts_show_text_mobile_only", false);        
+        mShowSmsLinksForAllPhones = !ePrefs.getBoolean("contacts_show_text_mobile_only", true);        
         
         startEntityQuery();
     }

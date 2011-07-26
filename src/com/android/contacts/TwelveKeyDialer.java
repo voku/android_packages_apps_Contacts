@@ -532,7 +532,7 @@ public class TwelveKeyDialer extends Activity implements View.OnClickListener,
         
         prefVibrateOn = ePrefs.getBoolean("dial_enable_haptic", true);
         mVibratePattern = stringToLongArray(Settings.System.getString(getContentResolver(), Settings.System.HAPTIC_TAP_ARRAY));
-        retrieveLastDialled = ePrefs.getBoolean("dial_retrieve_last", false);
+        retrieveLastDialled = ePrefs.getBoolean("dial_retrieve_last", true);
         returnToDialer = ePrefs.getBoolean("dial_return", false);
 
         updateDialAndDeleteButtonEnabledState();
