@@ -932,7 +932,7 @@ public class TwelveKeyDialer extends Activity implements View.OnClickListener,
                 // Otherwise, pressing the Dial button without entering
                 // any digits means "recall the last number dialed".
                 // Only if set in options.
-                mDigits.setText(mLastNumberDialed);
+                mDigits.append(mLastNumberDialed);
                 mDigits.setSelection(mDigits.length());
                 return;
             } else {
@@ -1452,9 +1452,9 @@ public class TwelveKeyDialer extends Activity implements View.OnClickListener,
     	setDigitsColor();
 
         // The voicemail number might have been set after the app was started
-        if (mHasVoicemail != hasVoicemail()) {
-            setupKeypad(false);
-        }
+        //if (mHasVoicemail != hasVoicemail()) {
+        //    setupKeypad(false);
+        //}
     }    
     
     //Wysie: Method to check if there's any number entered

@@ -190,8 +190,8 @@ public class FallbackSource extends ContactsSource {
             kind.typeColumn = Phone.TYPE;
             
             kind.typeList = Lists.newArrayList();
-            kind.typeList.add(buildPhoneType(Phone.TYPE_HOME));
             kind.typeList.add(buildPhoneType(Phone.TYPE_MOBILE));
+            kind.typeList.add(buildPhoneType(Phone.TYPE_HOME));
             kind.typeList.add(buildPhoneType(Phone.TYPE_WORK));
             kind.typeList.add(buildPhoneType(Phone.TYPE_FAX_WORK).setSecondary(true));
             kind.typeList.add(buildPhoneType(Phone.TYPE_FAX_HOME).setSecondary(true));
