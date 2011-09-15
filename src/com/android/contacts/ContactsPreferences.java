@@ -22,7 +22,7 @@ import android.preference.Preference;
 import android.preference.ListPreference;
 import android.preference.CheckBoxPreference;
 import android.preference.PreferenceActivity;
-import 	android.preference.PreferenceScreen;
+import android.preference.PreferenceScreen;
 import android.content.ComponentName;
 import android.content.pm.PackageManager;
 import android.content.Intent;
