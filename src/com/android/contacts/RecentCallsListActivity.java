@@ -703,7 +703,7 @@ public class RecentCallsListActivity extends ListActivity
 
             if (!TextUtils.isEmpty(name)) {
                 views.line1View.setText(name);
-                views.labelView.setVisibility(View.VISIBLE);
+                views.line1View.setVisibility(View.VISIBLE);
                 CharSequence numberLabel = Phone.getTypeLabel(context.getResources(), ntype, label);
                 views.numberView.setVisibility(View.VISIBLE);
                 views.numberView.setText(formattedNumber);
