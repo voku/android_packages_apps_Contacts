@@ -56,7 +56,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
@@ -86,7 +85,6 @@ import android.widget.ImageButton;
 @SuppressWarnings("deprecation")
 public class TwelveKeyDialer extends Activity implements View.OnClickListener,
         View.OnLongClickListener, View.OnKeyListener,
-        View.OnTouchListener,
         AdapterView.OnItemClickListener, TextWatcher {
     private static final String EMPTY_NUMBER = "";
     private static final String TAG = "TwelveKeyDialer";
@@ -141,10 +139,7 @@ public class TwelveKeyDialer extends Activity implements View.OnClickListener,
     private MenuItem mSmsMenuItem, mPreferences;
     private SharedPreferences ePrefs;
     private boolean prefVibrateOn, retrieveLastDialled, returnToDialer;
-   
-    // stores the return value of the last call to hasVoicemail()
-    private boolean mHasVoicemail;
- 
+    
     private static final int MENU_SMS = 4;
     private static final int MENU_PREFERENCES = 5;
 
@@ -243,7 +238,11 @@ public class TwelveKeyDialer extends Activity implements View.OnClickListener,
 
         maybeAddNumberFormatting();
 
-        setupKeypad(true);
+        // Check for the presence of the keypad
+        View view = findViewById(R.id.one);
+        if (view != null) {
+            setupKeypad();
+        }
 
         mVoicemailDialAndDeleteRow = findViewById(R.id.voicemailAndDialAndDelete);
 
@@ -254,15 +253,13 @@ public class TwelveKeyDialer extends Activity implements View.OnClickListener,
 
         if (r.getBoolean(R.bool.config_show_onscreen_dial_button)) {
             mDialButton.setOnClickListener(this);
-            mDialButton.setOnTouchListener(this);
         } else {
             mDialButton.setVisibility(View.GONE); // It's VISIBLE by default
             mDialButton = null;
         }
 
-        View view = mVoicemailDialAndDeleteRow.findViewById(R.id.deleteButton);
+        view = mVoicemailDialAndDeleteRow.findViewById(R.id.deleteButton);
         view.setOnClickListener(this);
-        view.setOnTouchListener(this);
         view.setOnLongClickListener(this);
         mDelete = view;
 
@@ -398,58 +395,37 @@ public class TwelveKeyDialer extends Activity implements View.OnClickListener,
         mDigits.addTextChangedListener(this);
     }
 
-    private void setupKeypad(boolean setupAllDigits) {
+    private void setupKeypad() {
         // Setup the listeners for the buttons
         
         //YC: Changed type from View to ImageButton
         ImageButton digitOne = (ImageButton)findViewById(R.id.one);
-
-        // Check for the presence of the keypad
-        if (digitOne == null)
-            return;
-
         digitOne.setOnClickListener(this);
-        digitOne.setOnTouchListener(this);
         digitOne.setOnLongClickListener(this);
-       
-        mHasVoicemail = hasVoicemail();
- 
+        
         //YC: Set image accordingly        
-        if (mHasVoicemail) {
+        if (hasVoicemail()) {
         	digitOne.setImageResource(R.drawable.dial_num_1_with_vm);
         }
         else {
         	digitOne.setImageResource(R.drawable.dial_num_1_no_vm);
         }
-        if (setupAllDigits) {
-            findViewById(R.id.two).setOnClickListener(this);
-            findViewById(R.id.three).setOnClickListener(this);
-            findViewById(R.id.four).setOnClickListener(this);
-            findViewById(R.id.five).setOnClickListener(this);
-            findViewById(R.id.six).setOnClickListener(this);
-            findViewById(R.id.seven).setOnClickListener(this);
-            findViewById(R.id.eight).setOnClickListener(this);
-            findViewById(R.id.nine).setOnClickListener(this);
-            findViewById(R.id.star).setOnClickListener(this);
 
-            findViewById(R.id.two).setOnTouchListener(this);
-            findViewById(R.id.three).setOnTouchListener(this);
-            findViewById(R.id.four).setOnTouchListener(this);
-            findViewById(R.id.five).setOnTouchListener(this);
-            findViewById(R.id.six).setOnTouchListener(this);
-            findViewById(R.id.seven).setOnTouchListener(this);
-            findViewById(R.id.eight).setOnTouchListener(this);
-            findViewById(R.id.nine).setOnTouchListener(this);
-            findViewById(R.id.star).setOnTouchListener(this);
+        findViewById(R.id.two).setOnClickListener(this);
+        findViewById(R.id.three).setOnClickListener(this);
+        findViewById(R.id.four).setOnClickListener(this);
+        findViewById(R.id.five).setOnClickListener(this);
+        findViewById(R.id.six).setOnClickListener(this);
+        findViewById(R.id.seven).setOnClickListener(this);
+        findViewById(R.id.eight).setOnClickListener(this);
+        findViewById(R.id.nine).setOnClickListener(this);
+        findViewById(R.id.star).setOnClickListener(this);
 
-            View view = findViewById(R.id.zero);
-            view.setOnClickListener(this);
-            view.setOnTouchListener(this);
-            view.setOnLongClickListener(this);
+        View view = findViewById(R.id.zero);
+        view.setOnClickListener(this);
+        view.setOnLongClickListener(this);
 
-            findViewById(R.id.pound).setOnClickListener(this);
-            findViewById(R.id.pound).setOnTouchListener(this);
-        }
+        findViewById(R.id.pound).setOnClickListener(this);
     }
 
     @Override
@@ -712,6 +688,7 @@ public class TwelveKeyDialer extends Activity implements View.OnClickListener,
     }
 
     private void keyPressed(int keyCode) {
+        vibrate();
         KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, keyCode);
         mDigits.onKeyDown(keyCode, event);
     }
@@ -796,10 +773,15 @@ public class TwelveKeyDialer extends Activity implements View.OnClickListener,
                 break;
             }
             case R.id.dialButton: {
-                // Call dialButtonPressed() regardless if there is something
-                // entered or not.
-                // dialButtonPressed() will handle all combinations
-                dialButtonPressed();
+                // Vibrate here too, just like we do for the regular keys
+                vibrate();
+                if (mDigits.length() == 0) {
+                    mDigits.setText(getLastDialedNumber());
+                    mDigits.setSelection(mDigits.length());
+                }
+                else {                  
+                    dialButtonPressed();
+                }
                 break;
             }
             /*
@@ -825,21 +807,13 @@ public class TwelveKeyDialer extends Activity implements View.OnClickListener,
             	else if (ePrefs.getString("vm_button", "0").equals("2")) {
             		callVoicemail();
             	}
+            	vibrate();
             	break;
             }
         }
         
         //Wysie: Set the "voicemail"/add button to be enabled/disabled according to if any number is displayed   
         checkForNumber();
-    }
-
-    @Override
-    public boolean onTouch(View view, MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            vibrate();
-        }
-        // always return false, so onClick() is still launched afterwards
-        return false;
     }
 
     public boolean onLongClick(View view) {
@@ -928,12 +902,10 @@ public class TwelveKeyDialer extends Activity implements View.OnClickListener,
                 intent.setData(Uri.fromParts("tel", EMPTY_NUMBER, null));
                 intent.putExtra(EXTRA_SEND_EMPTY_FLASH, true);
                 sendEmptyFlash = true;
-            } else if (retrieveLastDialled && !TextUtils.isEmpty(mLastNumberDialed)) {
+            } else if (!TextUtils.isEmpty(mLastNumberDialed)) {
                 // Otherwise, pressing the Dial button without entering
                 // any digits means "recall the last number dialed".
-                // Only if set in options.
-                mDigits.append(mLastNumberDialed);
-                mDigits.setSelection(mDigits.length());
+                mDigits.setText(mLastNumberDialed);
                 return;
             } else {
                 // Rare case: there's no "last number dialed".  There's
@@ -1347,7 +1319,6 @@ public class TwelveKeyDialer extends Activity implements View.OnClickListener,
     private void initVoicemailButton() {
     	mVoicemailButton = (ImageButton)mVoicemailDialAndDeleteRow.findViewById(R.id.voicemailButton);
     	mVoicemailButton.setOnClickListener(this);
-        mVoicemailButton.setOnTouchListener(this);
     	
     	if (ePrefs.getString("vm_button", "0").equals("0")) {
     		mVoicemailButton.setImageResource(R.drawable.sym_action_add);
@@ -1450,11 +1421,6 @@ public class TwelveKeyDialer extends Activity implements View.OnClickListener,
     	initVoicemailButton();
     	checkForNumber();
     	setDigitsColor();
-
-        // The voicemail number might have been set after the app was started
-        //if (mHasVoicemail != hasVoicemail()) {
-        //    setupKeypad(false);
-        //}
     }    
     
     //Wysie: Method to check if there's any number entered

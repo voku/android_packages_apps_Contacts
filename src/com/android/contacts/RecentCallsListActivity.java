@@ -703,7 +703,7 @@ public class RecentCallsListActivity extends ListActivity
 
             if (!TextUtils.isEmpty(name)) {
                 views.line1View.setText(name);
-                views.line1View.setVisibility(View.VISIBLE);
+                views.labelView.setVisibility(View.VISIBLE);
                 CharSequence numberLabel = Phone.getTypeLabel(context.getResources(), ntype, label);
                 views.numberView.setVisibility(View.VISIBLE);
                 views.numberView.setText(formattedNumber);
@@ -953,7 +953,7 @@ public class RecentCallsListActivity extends ListActivity
             resetNewCallsFlag();
         
             mPhotoLoader.resume();
-            mAdapter.startRequestProcessing();
+            mAdapter.mPreDrawListener = null; // Let it restart the thread after next draw
         }
     }
 

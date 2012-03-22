@@ -77,16 +77,7 @@ public final class QuickContactActivity extends Activity implements
         final int mode = extras.getInt(QuickContact.EXTRA_MODE, QuickContact.MODE_MEDIUM);
         final String[] excludeMimes = extras.getStringArray(QuickContact.EXTRA_EXCLUDE_MIMES);
 
-        if (target!=null) {
-            mQuickContact.show(lookupUri, target, mode, excludeMimes);
-        } else {
-           Log.d(TAG, "Missing anchor rectangle");
-           Log.d(TAG, "Target was null, hence contact details was launched rather than quick_contact");
-           Intent i = new Intent(Intent.ACTION_VIEW);
-           i.setData(lookupUri);
-           startActivity(i);
-           finish();
-        }
+        mQuickContact.show(lookupUri, target, mode, excludeMimes);
     }
 
     /** {@inheritDoc} */
