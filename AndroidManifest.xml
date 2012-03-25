@@ -40,7 +40,6 @@
         android:icon="@drawable/ic_launcher_contacts"
         android:process="android.process.acore"
         android:taskAffinity="android.task.contacts"
-        android:hardwareAccelerated="true"
     >
 
         <!-- A virtual 12 key dialer -->
